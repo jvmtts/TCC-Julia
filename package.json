@@ -1,0 +1,15 @@
+{
+  "name": "julia-lab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Estúdio de cenas de animação para experimentar HTML, CSS e JavaScript.",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "start": "node scripts/serve.mjs",
+    "test": "node --test tests/scene.test.mjs tests/server.test.mjs",
+    "check": "node --check app.js && node --check scene.mjs && node --check scripts/serve.mjs && node --check scripts/build.mjs",
+    "build": "node scripts/build.mjs"
+  },
+  "engines": { "node": ">=20" }
+}

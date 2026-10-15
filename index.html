@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101420">
+  <meta name="description" content="Monte sua figurinha com HTML, personalize com CSS e dê vida com JavaScript.">
+  <title>Júlia - TCC</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body data-universe="toy">
+  <div class="shell">
+    <header class="header"><a class="brand" href="./" aria-label="Júlia Studio, início"><span class="brand-icon" aria-hidden="true">j.</span><span>júlia<span class="brand-light">/studio</span></span></a><span class="header-note">HTML, CSS E UM POUCO DE IMAGINAÇÃO.</span><button id="reset" class="reset" type="button"><span aria-hidden="true">↶</span>Reiniciar</button></header>
+    <main>
+      <section class="intro" aria-labelledby="page-title"><div><div class="eyebrow">LABORATÓRIO DE FIGURINHAS</div><h1 id="page-title">Pequenas criações.<br><span>Grandes personagens.</span></h1></div><span class="intro-note">Monte. Personalize.<br>Dê vida à sua coleção. <span aria-hidden="true">↙</span></span></section>
+      <section class="studio" aria-label="Bancada de criação">
+        <nav class="tabs" role="tablist" aria-label="Tecnologia"><button id="tab-html" class="tab active" role="tab" aria-controls="panel-html" aria-selected="true" data-mode="html"><span>01</span><b>HTML<small>Construa</small></b><i aria-hidden="true">↗</i></button><button id="tab-css" class="tab" role="tab" aria-controls="panel-css" aria-selected="false" tabindex="-1" data-mode="css"><span>02</span><b>CSS<small>Transforme</small></b><i aria-hidden="true">↗</i></button><button id="tab-js" class="tab" role="tab" aria-controls="panel-js" aria-selected="false" tabindex="-1" data-mode="js"><span>03</span><b>JavaScript<small>Dê vida</small></b><i aria-hidden="true">↗</i></button></nav>
+        <div class="workspace">
+          <div class="stage js-off" id="stage" data-look="cinema" data-layout="poster" data-filter="original" data-font="cinema">
+            <div class="stage-top"><span><i class="status-dot"></i> SUA FIGURINHA</span><div class="stage-actions"><button id="outline" class="outline-button" type="button" aria-pressed="false"><span aria-hidden="true">⌗</span>Estrutura</button><button id="focus-mode" class="outline-button" type="button" aria-expanded="false" aria-label="Ativar modo foco"><span aria-hidden="true">⛶</span><b id="focus-label">Foco</b></button></div></div>
+            <div class="scene-center" id="scene-center"><div class="piece-fit" id="piece-fit"><div class="motion-layer" id="motion-layer"><div class="artifact-wrap" id="artifact-wrap">
+              <article class="artifact" id="artifact" aria-label="Sua figurinha interativa">
+                <span class="card-glint" aria-hidden="true"><i id="shine-beam"></i></span>
+                <div class="piece-top"><span id="piece-studio">DISNEY / PIXAR</span><span>Nº <b id="take-number">001</b></span></div>
+                <div id="piece-content" class="piece-content">
+                  <figure class="node node-image" data-node="image" data-tag="figure" hidden><img id="poster-image" src="./assets/toy.webp" width="1200" height="515" alt="Woody e Buzz Lightyear em Toy Story" decoding="async" fetchpriority="high" draggable="false"><figcaption id="image-caption">TOY STORY</figcaption></figure>
+                  <div class="node node-badge" data-node="badge" data-tag="span" hidden><span id="badge-text">AO INFINITO</span><span aria-hidden="true">✦</span></div>
+                  <h2 class="node node-title" data-node="title" data-tag="h2" id="scene-title" hidden>Toy Story</h2>
+                  <p class="node node-text" data-node="text" data-tag="p" id="scene-text" hidden>Amizade que vai além do infinito.</p>
+                  <button class="node node-button" data-node="button" data-tag="button" id="scene-action" type="button" hidden><span id="action-label">Dar vida à figurinha</span><span aria-hidden="true">↗</span></button>
+                  <ul class="node node-characters" data-node="characters" data-tag="ul" id="characters" hidden></ul>
+                  <blockquote class="node node-quote" data-node="quote" data-tag="blockquote" id="scene-quote" hidden>Uma ideia pode levar você muito longe.</blockquote>
+                  <hr class="node node-divider" data-node="divider" data-tag="hr" hidden>
+                </div>
+                <div id="empty-state" class="empty-state"><span aria-hidden="true">+</span><b>Uma figurinha em branco.</b><small>Escolha um elemento no HTML.</small></div>
+                <div class="piece-bottom"><span>EDIÇÃO CRIATIVA</span><span>✦ COLECIONE IDEIAS</span></div>
+              </article>
+              <div id="card-back" class="card-back" aria-hidden="true" inert><div class="back-kicker">VERSO DA COLEÇÃO <span>↙</span></div><img id="back-image" src="./assets/toy.webp" width="1200" height="515" alt="" draggable="false"><div class="back-connections"><span>HTML</span><i></i><span>CSS</span><i></i><span>JS</span></div><p>Uma criação.<br><em>Mil possibilidades.</em></p><button id="flip-back" type="button">Virar de volta <span aria-hidden="true">↗</span></button></div>
+            </div></div></div></div>
+            <div class="stage-bottom"><span id="stage-label">02 / TRANSFORME</span><span id="stage-hint">O mesmo conteúdo. Outro visual.</span></div>
+          </div>
+          <aside class="tools" aria-label="Ferramentas de criação">
+            <section id="panel-html" role="tabpanel" aria-labelledby="tab-html">
+              <div class="panel-heading"><span>ESCOLHA AS PARTES</span><span id="node-count">5 / 8</span></div>
+              <div class="build-actions"><button id="clear-scene" type="button" class="secondary">Esvaziar figurinha <span aria-hidden="true">↗</span></button><button id="restore-scene" type="button" class="text-button">Usar modelo pronto</button></div>
+              <div class="section-label">Toque para adicionar ou retirar</div><div id="node-palette" class="node-palette" role="group" aria-label="Elementos HTML"></div>
+              <details class="tool-group"><summary>Escrever na figurinha <span aria-hidden="true">+</span></summary><div class="details-body"><p id="content-empty" class="content-empty" hidden>Adicione título, texto, botão, selo ou frase para escrever aqui.</p><label class="field">Título<textarea id="edit-title" data-field="title" rows="2" maxlength="60"></textarea></label><label class="field">Texto<input id="edit-text" data-field="text" maxlength="110"></label><div class="field-pair"><label class="field">Botão<input id="edit-button" data-field="button" maxlength="28"></label><label class="field">Selo<input id="edit-badge" data-field="badge" maxlength="28"></label></div><label class="field">Frase<input id="edit-quote" data-field="quote" maxlength="110"></label></div></details>
+              <details class="tool-group"><summary>Mudar a ordem <span aria-hidden="true">+</span></summary><ol id="node-order" class="node-order"></ol></details>
+            </section>
+            <section id="panel-css" role="tabpanel" aria-labelledby="tab-css" hidden>
+              <div class="panel-heading"><span>PERSONALIZE SUA FIGURINHA</span><span>CSS</span></div>
+              <label class="switch-row"><span>Estilo ligado</span><input type="checkbox" id="css-enabled"><i class="switch" aria-hidden="true"></i></label>
+              <div class="section-label"><b>01</b> Seu desenho <span id="theme-name">Toy Story</span></div>
+              <div class="film-strip" id="film-strip" role="group" aria-label="Desenho da figurinha"></div>
+              <div class="section-label"><b>02</b> Acabamento</div>
+              <div class="look-options" role="group" aria-label="Acabamento">
+                <button data-look="cinema" type="button" aria-pressed="true" class="selected"><span class="finish-sample finish-classic" aria-hidden="true">✦</span>Adesivo</button>
+                <button data-look="glass" type="button" aria-pressed="false"><span class="finish-sample finish-holo" aria-hidden="true">✧</span>Holográfico</button>
+                <button data-look="comic" type="button" aria-pressed="false"><span class="finish-sample finish-comic" aria-hidden="true">POW</span>Quadrinhos</button>
+                <button data-look="minimal" type="button" aria-pressed="false"><span class="finish-sample finish-paper" aria-hidden="true">a.</span>Papel</button>
+              </div>
+              <div class="section-label"><b>03</b> Letras</div>
+              <div class="font-options" role="group" aria-label="Fonte do título">
+                <button type="button" data-font="cinema" class="selected" aria-pressed="true"><span aria-hidden="true">Aa</span>Marcante</button>
+                <button type="button" data-font="rounded" aria-pressed="false"><span aria-hidden="true">Aa</span>Suave</button>
+                <button type="button" data-font="serif" aria-pressed="false"><span aria-hidden="true">Aa</span>Clássica</button>
+                <button type="button" data-font="mono" aria-pressed="false"><span aria-hidden="true">Aa</span>Código</button>
+              </div>
+              <details class="tool-group"><summary>Cores, filtros e formato <span aria-hidden="true">+</span></summary><div class="details-body">
+                <div class="color-row"><label>Destaques<input id="color-accent" type="color" data-style="accent" value="#f9ce59"></label><label>Fundo do card<input id="color-background" type="color" data-style="background" value="#152b49"></label></div>
+                <div class="section-label">Filtro da ilustração</div><div class="filter-options" role="group" aria-label="Filtro da ilustração">
+                  <button type="button" data-filter="original" aria-pressed="true" class="selected"><span aria-hidden="true"></span>Original</button><button type="button" data-filter="vivid" aria-pressed="false"><span aria-hidden="true"></span>Vibrante</button><button type="button" data-filter="mono" aria-pressed="false"><span aria-hidden="true"></span>P&amp;B</button><button type="button" data-filter="vintage" aria-pressed="false"><span aria-hidden="true"></span>Retrô</button>
+                </div>
+                <div class="section-label">Formato</div><div class="layout-options" role="group" aria-label="Formato"><button type="button" data-layout="poster" aria-pressed="true" class="selected">↕ Figurinha</button><button type="button" data-layout="wide" aria-pressed="false">↔ Deitado</button><button type="button" data-layout="reverse" aria-pressed="false">⇵ Invertido</button></div>
+                <div class="range-grid"><label class="range-field">Cantos<output id="radius-output">20 px</output><input id="radius" data-style="radius" type="range" min="0" max="40" value="20"></label><label class="range-field">Sombra<output id="shadow-output">24</output><input id="shadow" data-style="shadow" type="range" min="0" max="40" value="24"></label><label class="range-field">Inclinação<output id="rotation-output">−4°</output><input id="rotation" data-style="rotation" type="range" min="-12" max="12" value="-4"></label><label class="range-field">Tamanho da letra<output id="size-output">36 px</output><input id="size" data-style="size" type="range" min="24" max="48" value="36"></label></div>
+              </div></details>
+            </section>
+            <section id="panel-js" role="tabpanel" aria-labelledby="tab-js" hidden>
+              <div class="panel-heading"><span>AGORA, FAÇA ACONTECER</span><span>7 AÇÕES</span></div>
+              <label class="switch-row"><span>Interações ligadas</span><input type="checkbox" id="js-enabled"><i class="switch" aria-hidden="true"></i></label>
+              <div id="behavior-options" class="behavior-options" role="group" aria-label="Ações JavaScript"></div>
+              <button id="run" class="primary" type="button"><span id="run-label">Testar: virar</span><span aria-hidden="true">↗</span></button><div class="interaction-line"><span id="interaction-count">0 interações</span><button id="center-piece" type="button">Centralizar ↖</button></div>
+            </section>
+          </aside>
+        </div>
+        <div class="studio-footer"><span><i class="status-dot"></i> SUA COLEÇÃO COMEÇA AQUI.</span><button id="next-mode" type="button">Agora: JavaScript <span aria-hidden="true">→</span></button></div>
+      </section>
+      <footer class="page-footer"><span>JÚLIA STUDIO / HTML + CSS + JAVASCRIPT</span><a id="film-credit" href="https://movies.disney.com/toy-story" target="_blank" rel="noopener noreferrer">ARTE: DISNEY / PIXAR ↗</a></footer>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div><noscript><div class="noscript">Ative o JavaScript do navegador para usar as ferramentas do estúdio.</div></noscript>
+</body>
+</html>
