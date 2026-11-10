@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createState, reduce, NODES } from '../scene.mjs';
+import { readableColor, contrastRatio, PALETTES } from '../src/colors.mjs';
 
 test('nomes inválidos ou herdados usam um tema válido e não alteram a composição', () => {
   for (const id of ['missing','__proto__','constructor']) {
@@ -42,6 +43,8 @@ test('trocar de filme preserva estrutura, conteúdo editado e escolhas de estilo
   state = reduce(state, { type: 'UNIVERSE', id: 'stitch' });
   assert.equal(state.fields.title, 'Minha cena');
   assert.equal(state.style.font, 'serif');
+  assert.equal(state.style.accent, createState().style.accent);
+  assert.equal(state.style.background, createState().style.background);
   assert.deepEqual(state.nodes, createState().nodes);
 });
 
@@ -75,4 +78,116 @@ test('início e reinício começam vazios, sem CSS e sem ações', () => {
   const built = reduce(initial,{type:'RESTORE'});
   assert.equal(built.nodes.length,5);
   assert.deepEqual(reduce(built,{type:'RESET'}),initial);
+});
+
+test('navegar nunca ativa CSS ou JavaScript, inclusive depois de desligá-los', () => {
+  let state = reduce(createState(), { type: 'RESTORE' });
+  for (const mode of ['css', 'js', 'html', 'css']) {
+    state = reduce(state, { type: 'NAVIGATE', mode });
+    assert.equal(state.mode, mode);
+    assert.equal(state.css, false);
+    assert.equal(state.js, false);
+  }
+  state = reduce(state, { type: 'CSS', value: true });
+  state = reduce(state, { type: 'JS', value: true });
+  state = reduce(state, { type: 'CSS', value: false });
+  state = reduce(state, { type: 'JS', value: false });
+  state = reduce(state, { type: 'NAVIGATE', mode: 'js' });
+  assert.equal(state.css, false);
+  assert.equal(state.js, false);
+});
+
+test('trocar painéis e escolher comportamento preserva conteúdo e não conta interações', () => {
+  let state = reduce(createState(), { type: 'RESTORE' });
+  state = reduce(state, { type: 'FIELD', key: 'title', value: 'Minha coleção' });
+  const nodes = state.nodes;
+  const fields = state.fields;
+  for (const mode of ['css', 'js', 'html']) state = reduce(state, { type: 'NAVIGATE', mode });
+  state = reduce(state, { type: 'BEHAVIOR', id: 'spin' });
+  assert.equal(state.interactions, 0);
+  assert.equal(state.js, false);
+  assert.equal(state.nodes, nodes);
+  assert.equal(state.fields, fields);
+});
+
+test('uma figurinha vazia não ativa recursos e remover a última parte os desliga', () => {
+  let state = createState();
+  state = reduce(state, { type: 'CSS', value: true });
+  state = reduce(state, { type: 'JS', value: true });
+  assert.equal(state.css, false);
+  assert.equal(state.js, false);
+  state = reduce(state, { type: 'TOGGLE_NODE', id: 'title' });
+  state = reduce(state, { type: 'CSS', value: true });
+  state = reduce(state, { type: 'JS', value: true });
+  state = reduce(state, { type: 'INTERACT' });
+  assert.equal(state.interactions, 1);
+  state = reduce(state, { type: 'TOGGLE_NODE', id: 'title' });
+  assert.equal(state.css, false);
+  assert.equal(state.js, false);
+  assert.equal(reduce(state, { type: 'INTERACT' }), state);
+});
+
+test('desligar camadas preserva estilos, estrutura e conteúdo personalizado', () => {
+  let state = reduce(createState(), { type: 'RESTORE' });
+  state = reduce(state, { type: 'STYLE', key: 'look', value: 'glass' });
+  state = reduce(state, { type: 'FIELD', key: 'title', value: 'Uma ideia' });
+  const before = structuredClone(state);
+  for (const key of Object.keys(state.layers)) state = reduce(state, { type: 'LAYER', key, value: false });
+  assert.deepEqual(state.style, before.style);
+  assert.deepEqual(state.nodes, before.nodes);
+  assert.deepEqual(state.fields, before.fields);
+  assert.ok(Object.values(before.layers).every(Boolean));
+  assert.ok(Object.values(state.layers).every(value => !value));
+  assert.equal(reduce(state, { type: 'LAYER', key: '__proto__', value: true }), state);
+  assert.equal(reduce(state, { type: 'NAVIGATE', mode: '__proto__' }), state);
+});
+
+test('cores claras, escuras e intermediárias mantêm texto com contraste de pelo menos 4,5', () => {
+  for (let r = 0; r <= 255; r += 17) {
+    for (let g = 0; g <= 255; g += 17) {
+      for (let b = 0; b <= 255; b += 17) {
+        const background = '#' + [r, g, b].map(value => value.toString(16).padStart(2, '0')).join('');
+        assert.ok(contrastRatio(readableColor(background), background) >= 4.5, background);
+      }
+    }
+  }
+});
+
+test('paletas e a combinação oliva com marrom recebem texto legível em ambas as superfícies', () => {
+  for (const { background, accent } of [...PALETTES, { background: '#819a64', accent: '#4a2507' }]) {
+    assert.ok(contrastRatio(readableColor(background), background) >= 4.5);
+    assert.ok(contrastRatio(readableColor(accent), accent) >= 4.5);
+  }
+});
+
+test('contraste rejeita formatos inválidos e não interpreta entradas como CSS', () => {
+  for (const value of [null, undefined, '', '#fff', 'transparent', 'url(test)', '#zzzzzz']) {
+    assert.equal(contrastRatio('#ffffff', value), 0);
+    assert.equal(readableColor(value), '#000000');
+  }
+});
+
+test('arrastar reordena as partes preservando conteúdo, estilo e tecnologias', () => {
+  let state = reduce(createState(),{type:'RESTORE'});
+  state = reduce(state,{type:'CSS',value:true});
+  state = reduce(state,{type:'FIELD',key:'title',value:'Minha figurinha'});
+  const nodes = [...state.nodes].reverse();
+  const next = reduce(state,{type:'REORDER',nodes});
+  assert.deepEqual(next.nodes,nodes);
+  assert.notEqual(next.nodes,nodes);
+  assert.equal(next.customOrder,true);
+  assert.deepEqual(next.fields,state.fields);
+  assert.deepEqual(next.style,state.style);
+  assert.equal(next.css,state.css);
+  assert.equal(next.js,state.js);
+  assert.deepEqual(state.nodes,['image','badge','title','text','button']);
+});
+
+test('reordenação rejeita partes ausentes, repetidas e entradas inválidas', () => {
+  const state = reduce(createState(),{type:'RESTORE'});
+  for (const nodes of [null,{},[],['image'],['image','image','title','text','button'],['image','badge','title','text','missing']]) assert.equal(reduce(state,{type:'REORDER',nodes}),state);
+  assert.equal(reduce(state,{type:'REORDER',nodes:[...state.nodes]}),state);
+  const custom = reduce(state,{type:'REORDER',nodes:[...state.nodes].reverse()});
+  assert.equal(reduce(custom,{type:'RESTORE'}).customOrder,false);
+  assert.equal(reduce(custom,{type:'RESET'}).customOrder,false);
 });

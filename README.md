@@ -1,46 +1,54 @@
-# Júlia Studio — laboratório de figurinhas
+# Júlia Studio
 
-Experiência visual para apresentar HTML, CSS e JavaScript na escola. Feita com as três tecnologias, sem dependências de execução. Prioriza celular e também funciona no computador.
+Laboratório de figurinhas para demonstrar conteúdo (HTML), aparência (CSS) e comportamento (JavaScript). Interface em React 19, Tailwind CSS 4 e Vite 7. Imagens locais em WebP; a página não depende de serviços externos durante a apresentação.
 
-## Iniciar
+## Rodar localmente
 
-Na pasta do projeto, com Node.js 20 ou superior:
+Use Node.js 22.12 ou superior. Na pasta do projeto:
 
 ```powershell
+npm ci
 npm run dev
 ```
 
-Abra o endereço mostrado no terminal, normalmente http://127.0.0.1:4173. Para ver esta atualização, encerre o servidor anterior com Ctrl+C, execute o comando novamente e atualize a página com Ctrl+F5. Não precisa instalar pacotes.
-
-Se a porta estiver ocupada por outra sessão do projeto, use o endereço da sessão existente ou encerre essa sessão no próprio terminal. Também é possível escolher outra porta:
+Abra o endereço mostrado pelo Vite. Se a porta 4173 já estiver ocupada, ele informa a próxima disponível. Mantenha o terminal aberto. Para escolher outra porta:
 
 ```powershell
-$env:PORT = '4174'
-npm run dev
+npm run dev -- --port 4178
 ```
 
-## Usar na apresentação
+## Fluxo da apresentação
 
-O site abre no HTML com a figurinha vazia e crua. A primeira visita ao CSS liga o estilo; a primeira visita ao JavaScript liga as interações. As partes montadas são preservadas. Reiniciar retorna ao início vazio. Depois da primeira ativação, os interruptores mantêm a escolha manual.
+1. O início fica vazio. No HTML, escolha um personagem e adicione imagem, título, texto, botão e outras partes. Os elementos aparecem sem estilo. Edição e reordenação são opcionais.
+2. Abrir a aba CSS apenas muda o painel. Use **Aplicar CSS** para transformar a figurinha. Experimente acabamentos e desligue individualmente cores, tipografia, moldura e composição. Filtros, paletas e formatos usam escolhas visuais, sem menus nativos. O texto do botão e do corpo se adapta às cores escolhidas para manter contraste. **Ver sem CSS** compara com a estrutura original sem perder ajustes.
+3. Abrir JavaScript também preserva os recursos desligados. Use **Ativar JS**, escolha uma resposta e pressione **Testar**. Escolher uma resposta não executa a ação. O botão da figurinha executa a resposta escolhida.
+4. Recomeçar esvazia a figurinha, desliga CSS/JS e volta ao HTML. O personagem é mantido. Remover a última parte também desliga os recursos, sem recolocar partes automaticamente.
 
+Na composição com imagem e título curto, o título aparece sobre a imagem. Títulos longos passam para uma área própria. Partes adicionais são agrupadas com o botão ao final; desligar CSS revela a ordem original do HTML.
 
-- **HTML:** esvazie a figurinha e adicione as partes manualmente. O painel mostra quais elementos estão presentes. A edição de texto mostra apenas os campos das partes adicionadas; edição e ordem ficam recolhidas inicialmente.
-- **CSS:** escolha Toy Story, Lilo & Stitch, Os Flintstones, Garfield ou He-Man. Experimente acabamento, amostras de fontes, cores, filtros, formato e ajustes finos. A troca de desenho aplica um tema completo e mantém as partes e os textos personalizados. A imagem continua sendo conteúdo de um elemento HTML; fontes, moldura, cores e efeitos visuais são CSS.
-- **JavaScript:** toque numa ação para experimentá-la imediatamente; o botão Testar repete a ação. Virar e separar camadas são reversíveis. Em Arrastar, segure a figurinha para movê-la. Desligar interações bloqueia as ações da figurinha.
-- **Estrutura:** mostra os elementos HTML na própria figurinha. **Foco:** mantém a prévia e as ferramentas visíveis numa bancada que ocupa a tela; Escape sai desse modo.
+Trocar de personagem altera somente o conteúdo; cores e estilos personalizados são preservados. Arrastar funciona pelo toque ou mouse; usar o teclado para executar as demais ações continua disponível. Camadas requer CSS ativo. O modo Foco mantém a prévia junto das ferramentas; Escape encerra o modo. A preferência por movimento reduzido é respeitada.
 
-A montagem não usa temporizadores para recolocar elementos. Trocar cores ou desenhos preserva uma figurinha vazia. As mudanças visuais dão retorno ao toque, e a preferência do sistema por movimento reduzido é respeitada.
+Os controles da bancada usam JavaScript para demonstrar as três tecnologias. O interruptor de JS controla os comportamentos da figurinha, não o JavaScript de toda a aplicação.
 
-## Verificação e build
+## Verificar e gerar a entrega
 
 ```powershell
 npm run check
 npm test
 npm run build
+npm run preview
 ```
 
-Os testes verificam montagem, ordenação, preservação de conteúdo, limites dos estilos e o servidor HTTP. O build copia somente os arquivos públicos necessários para `dist/`. O servidor bloqueia acesso a arquivos internos do projeto.
+Os testes de estado cobrem montagem, reordenação, edição, valores inválidos, limites, navegação sem ativação, preservação dos dados, ativação explícita e reinício. O build gera `dist/`, pronta para hospedagem estática. O projeto permanece local; esta revisão não publica o site.
 
-Os arquivos `index.html`, `styles.css`, `app.js` e `scene.mjs` separam estrutura, aparência, interação e regras de estado. As imagens são locais e otimizadas em WebP; as fontes têm alternativas locais quando o Google Fonts está indisponível.
+## Organização
 
-Créditos das imagens em `assets/CREDITS-ANIMATION.md`. Personagens e artes pertencem aos respectivos titulares; o projeto é uma demonstração acadêmica.
+- `scene.mjs`: dados e regras de estado puras, verificadas com o test runner do Node.
+- `src/App.jsx`: bancada, painéis e figurinha; efeitos transitórios separados do conteúdo.
+- `src/styles.css`: Tailwind e direção cartunesca responsiva, com alternativas para movimento reduzido.
+- `src/sticker.css`: apresentação da figurinha, comparação sem estilo e efeitos de camadas.
+- `src/StyleChoices.jsx` e `src/style-choices.css`: filtros com prévias, paletas e formatos.
+- `src/colors.mjs`: cálculo de contraste e escolha de texto claro ou escuro.
+- `public/assets`: imagens e créditos.
+
+Créditos em `public/assets/CREDITS-ANIMATION.md`. Personagens e artes pertencem aos respectivos titulares. Demonstração acadêmica.

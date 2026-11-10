@@ -1,0 +1,46 @@
+.palette-options { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 9px; }
+.palette-options button { display: flex; flex-direction: column; gap: 9px; align-items: stretch; min-width: 0; color: #746182; text-align: center; font-size: 9px; font-weight: 700; }
+.palette-swatch { position: relative; display: block; height: 40px; border: 2px solid white; outline: 1px solid #d0c1dc; border-radius: 10px; overflow: visible; }
+.palette-swatch > i { position: absolute; left: 10px; right: 10px; height: 11px; bottom: 8px; border-radius: 3px; }
+.palette-options button[aria-pressed="true"] .palette-swatch { outline: 2px solid #6d4a9a; box-shadow: 0 3px 0 #cbb8dc; }
+.palette-options button:hover .palette-swatch { transform: translateY(-2px); }
+.choice-check { position: absolute; display: grid; place-items: center; width: 17px; height: 17px; background: #fff; color: #3a2850; border: 1.5px solid #3a2850; border-radius: 50%; top: -6px; right: -5px; z-index: 2; }
+.image-filters { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px; }
+.image-filters > button { min-width: 0; color: #75617e; text-align: center; }
+.image-filters > button > span { position: relative; display: block; border: 2px solid #fff; outline: 1px solid #d7c9e0; border-radius: 9px; }
+.image-filters img { width: 100%; height: 61px; object-fit: cover; border-radius: 7px; }
+.image-filters strong { display: block; margin-top: 10px; font-size: 10px; font-weight: 700; line-height: 1.35; }
+.image-filters button[aria-pressed="true"] > span { outline: 2px solid #7650a4; box-shadow: 0 3px 0 #d4c3e2; }
+.image-filters button:hover img { transform: scale(.97); }
+.image-filters [data-filter="vivid"] img { filter: saturate(1.6) contrast(1.06); }
+.image-filters [data-filter="mono"] img { filter: grayscale(1); }
+.image-filters [data-filter="vintage"] img { filter: sepia(.6) saturate(.7); }
+.format-choices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; }
+.format-choices > button { display: flex; align-items: center; flex-direction: column; gap: 10px; position: relative; padding: 13px 5px 11px; min-width: 0; border: 1.5px solid #d6c8e1; border-radius: 10px; color: #8a72a5; background: white; }
+.format-choices > button > svg { position: absolute; top: 7px; right: 7px; }
+.format-choices strong { font-size: 10px; color: #74617e; font-weight: 700; line-height: 1.3; text-align: center; }
+.format-preview { display: grid; place-items: center; width: 29px; height: 37px; background: #ece3fb; border: 1.5px solid #8a6bb3; border-radius: 5px; box-shadow: 2px 2px 0 #d3c4e5; }
+.format-wide { width: 43px; height: 29px; margin: 4px 0; }
+.format-reverse { background: #fff2c7; }
+.format-choices > button[aria-pressed="true"] { border-color: #8160a9; background: #f4ebfd; box-shadow: 0 2px 0 #d5c1e7; }
+.custom-colors { padding: 13px; border: 1px dashed #d6c4e1; border-radius: 9px; margin: 5px 0; }
+.custom-colors summary { font-size: 11px; font-weight: 700; color: #80668e; cursor: pointer; }
+.custom-colors .color-controls { margin: 14px 0 9px; }
+.custom-colors > p { font-size: 10px; line-height: 1.5; color: #8b7698; margin-top: 7px; }
+.range-label input[type="range"] { appearance: none; -webkit-appearance: none; background: transparent; height: 24px; cursor: pointer; }
+.range-label input[type="range"]::-webkit-slider-runnable-track { background: #eee4fa; height: 7px; border-radius: 5px; border: 1px solid #af95c8; }
+.range-label input[type="range"]::-webkit-slider-thumb { appearance: none; -webkit-appearance: none; width: 18px; height: 18px; margin-top: -6px; background: #ffdc69; border: 1.5px solid #534060; border-radius: 50%; box-shadow: 1px 2px 0 #baa4cd; }
+.range-label input[type="range"]::-moz-range-track { background: #eee4fa; height: 5px; border: 1px solid #af95c8; border-radius: 5px; }
+.range-label input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; background: #ffdc69; border: 1.5px solid #534060; border-radius: 50%; box-shadow: 1px 2px 0 #baa4cd; }
+.range-label output { color: #6b537d; }
+@media (max-width: 370px) {
+  .palette-options { gap: 7px; }
+  .palette-options button { font-size: 8px; }
+  .palette-swatch { height: 36px; }
+  .palette-swatch > i { left: 6px; right: 6px; }
+  .image-filters { gap: 7px; }
+  .image-filters img { height: 50px; }
+  .image-filters strong { font-size: 9px; }
+  .format-choices { gap: 7px; }
+  .format-choices strong { font-size: 9px; }
+}

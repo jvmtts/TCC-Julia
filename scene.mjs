@@ -14,22 +14,31 @@ const own = (object, key) => Object.hasOwn(object, key);
 
 export function createState(universe = 'toy') {
   const film = own(FILMS,universe) ? FILMS[universe] : FILMS.toy;
-  return { universe: own(FILMS, universe) ? universe : 'toy', nodes: [], fields: {}, css: false, js: false, behavior: 'flip', interactions: 0, style: { look: 'cinema', font: 'cinema', filter: 'original', layout: 'poster', accent: film.accent, background: film.background, radius: 6, shadow: 24, rotation: -3, size: 30 } };
+  return { universe: own(FILMS, universe) ? universe : 'toy', mode: 'html', customOrder: false, nodes: [], fields: {}, css: false, js: false, layers: { colors: true, type: true, frame: true, layout: true }, behavior: 'flip', interactions: 0, style: { look: 'cinema', font: 'cinema', filter: 'original', layout: 'poster', accent: film.accent, background: film.background, radius: 12, shadow: 24, rotation: -3, size: 30 } };
 }
 
 export function reduce(state, action) {
   if (!action || typeof action.type !== 'string') return state;
   switch (action.type) {
+    case 'NAVIGATE': return ['html','css','js'].includes(action.mode) ? { ...state, mode: action.mode } : state;
+    case 'LAYER': return own(state.layers, action.key) ? { ...state, layers: { ...state.layers, [action.key]: Boolean(action.value) } } : state;
     case 'UNIVERSE': {
       if (!own(FILMS, action.id)) return state;
-      const film = FILMS[action.id];
-      return { ...state, universe: action.id, style: { ...state.style, accent: film.accent, background: film.background } };
+      return { ...state, universe: action.id };
     }
-    case 'TOGGLE_NODE':
+    case 'TOGGLE_NODE': {
       if (!own(NODES, action.id)) return state;
-      return { ...state, nodes: state.nodes.includes(action.id) ? state.nodes.filter(id => id !== action.id) : [...state.nodes, action.id] };
-    case 'CLEAR': return { ...state, nodes: [] };
-    case 'RESTORE': return { ...state, nodes: ['image','badge','title','text','button'] };
+      const nodes = state.nodes.includes(action.id) ? state.nodes.filter(id => id !== action.id) : [...state.nodes, action.id];
+      return { ...state, nodes, css: nodes.length > 0 && state.css, js: nodes.length > 0 && state.js };
+    }
+    case 'CLEAR': return { ...state, nodes: [], customOrder: false, css: false, js: false };
+    case 'RESTORE': return { ...state, nodes: ['image','badge','title','text','button'], customOrder: false };
+    case 'REORDER': {
+      const nodes = action.nodes;
+      if (!Array.isArray(nodes) || nodes.length !== state.nodes.length || new Set(nodes).size !== nodes.length || !nodes.every(id => state.nodes.includes(id))) return state;
+      if (nodes.every((id,index) => state.nodes[index] === id)) return state;
+      return { ...state, nodes: [...nodes], customOrder: true };
+    }
     case 'MOVE': {
       if (![1,-1].includes(action.direction)) return state;
       const index = state.nodes.indexOf(action.id);
@@ -37,7 +46,7 @@ export function reduce(state, action) {
       if (index < 0 || target < 0 || target >= state.nodes.length) return state;
       const nodes = [...state.nodes];
       [nodes[index], nodes[target]] = [nodes[target], nodes[index]];
-      return { ...state, nodes };
+      return { ...state, nodes, customOrder: true };
     }
     case 'FIELD': {
       const limits = { title: 60, text: 110, button: 28, badge: 28, quote: 110 };
@@ -58,10 +67,10 @@ export function reduce(state, action) {
       } else return state;
       return { ...state, style: { ...state.style, [action.key]: value } };
     }
-    case 'CSS': return { ...state, css: Boolean(action.value) };
-    case 'JS': return { ...state, js: Boolean(action.value) };
+    case 'CSS': return { ...state, css: state.nodes.length > 0 && Boolean(action.value) };
+    case 'JS': return { ...state, js: state.nodes.length > 0 && Boolean(action.value) };
     case 'BEHAVIOR': return own(BEHAVIORS, action.id) ? { ...state, behavior: action.id } : state;
-    case 'INTERACT': return state.js ? { ...state, interactions: Math.min(Number.MAX_SAFE_INTEGER, state.interactions + 1) } : state;
+    case 'INTERACT': return state.js && state.nodes.length ? { ...state, interactions: Math.min(Number.MAX_SAFE_INTEGER, state.interactions + 1) } : state;
     case 'RESET': return createState(state.universe);
     default: return state;
   }
